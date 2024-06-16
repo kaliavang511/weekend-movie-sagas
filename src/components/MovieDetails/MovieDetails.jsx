@@ -1,36 +1,41 @@
-import React, { useEffect } from 'react';
+import React, { useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 
 function MovieDetails() {
+    const dispatch = useDispatch();
+    const genres = useSelector(store => store.genres);
+    const history = useHistory()
 
-  const dispatch = useDispatch();
-  const genres = useSelector(store => store.genres);
-  const history = useHistory()
+    useEffect(() => {
+        dispatch({ type: 'FETCH_MOVIES' });
+        
+      }, []);
 
-  const handleClick= () => {
-    history.push(`/`);
-  }
-  useEffect(() => {
-    dispatch({type:'FETCH_MOVIES'})
-  }, []);
-  return (
-    <main>
-        <p> movie details</p>
-         <div data-testid="movieDetails"></div>
-        {genres.map(genres => {
-          return (
-            <div key={genres.id} >
-          <img src={genres.poster}/>
-           <p>{genres.title}</p>
-        < p>{genres.description}</p>
+  
+  
+    const handleClick = () => {
+        history.push('/')
+    }
+  
+    return(
+        <main>
+            <h1>Movie Details</h1>
+
+            <div data-testid="movieDetails">
+            {genres.map(movie => (
+             <div key={movie.id}>
+             <img src={movie.poster} />
+            <p>{movie.title}</p>
+            <p>Genres: {movie.genre_names}</p>
+            <p>Details: {movie.description}</p>
             </div>
-          );
-        })}
-             <button data-testid="toList" onClick={handleClick}>Back</button>
-    </main>
-  );
+         ))}
+        </div>
+            <button data-testid="toList" onClick={handleClick}>Back</button>
+        </main>
+    )
 }
 
-export default MovieDetails;
+export default MovieDetails

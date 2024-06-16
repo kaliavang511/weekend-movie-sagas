@@ -1,18 +1,20 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import logger from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
-import { takeEvery, put } from 'redux-saga/effects';
+import { takeEvery, put, takeLatest} from 'redux-saga/effects';
 import axios from 'axios';
 
-// Create the rootSaga generator function
+
 function* rootSaga() {
   yield takeEvery('FETCH_MOVIES', fetchAllMovies);
-  yield takeEvery('FETCH_GENRES', fetchAllGenres);
+  yield takeLatest('FETCH_GENRES', fetchAllGenres)
 }
 
 function* fetchAllMovies() {
   try {
+    // Get the movies:
     const moviesResponse = yield axios.get('/api/movies');
+    // Set the value of the movies reducer:
     yield put({
       type: 'SET_MOVIES',
       payload: moviesResponse.data
@@ -22,15 +24,21 @@ function* fetchAllMovies() {
   }
 }
 
-function* fetchAllGenres() {
-  try {
-    const genresResponse = yield axios.get('/api/genres');
+function* fetchAllGenres(action) {
+  try{
+    //Get the genres:
+    const genreResponse = yield axios.get(`/api/genres/${action.payload}`);
+    //set the values of the genres reducers:
+    yield put ({
+      type: 'SET_MOVIE_ID',
+      payload: action.payload
+    })
     yield put({
       type: 'SET_GENRES',
-      payload: genresResponse.data
+      payload: genreResponse.data
     });
-  } catch (error) {
-    console.log('fetchAllGenres error:', error);
+  }catch (error) {
+    console.log('fetchAllGenres', error);
   }
 }
 
@@ -56,12 +64,21 @@ const genres = (state = [], action) => {
       return state;
   }
 }
+const movieId = (state = [], action) => {
+  switch (action.type) {
+    case 'SET_MOVIE_ID':
+      return action.payload;
+    default:
+      return state;
+  }
+}
 
 // Create one store that all components can use
 const storeInstance = createStore(
   combineReducers({
     movies,
     genres,
+    movieId,
   }),
   // Add sagaMiddleware to our store
   applyMiddleware(sagaMiddleware, logger),
@@ -71,3 +88,6 @@ const storeInstance = createStore(
 sagaMiddleware.run(rootSaga);
 
 export default storeInstance;
+
+
+
