@@ -1,4 +1,6 @@
 Saga Movies Weekend
+
+
 This is a movie management application that allows users to view a list of movies and see detailed information about each movie, including its associated genres. The application uses React, Redux, and Redux-Saga.
 
 Home Page
