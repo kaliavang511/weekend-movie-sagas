@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import './MovieList.css';
 
 
 function MovieList() {
@@ -27,8 +28,8 @@ function MovieList() {
         {movies.map(movie => {
           return (
             <div data-testid='movieItem' key={movie.id}>
-              <h3>{movie.title}</h3>
-                <img data-testid="toDetails" onClick={handleDetails} id={movie.id} src={movie.poster} alt={movie.title}/>
+              <h3 className='title'>{movie.title}</h3>
+                <img className='image' data-testid="toDetails" onClick={handleDetails} id={movie.id} src={movie.poster} alt={movie.title}/>
             </div>
           );
         })}
@@ -38,3 +39,4 @@ function MovieList() {
 }
 
 export default MovieList;
+

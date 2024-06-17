@@ -1,6 +1,9 @@
 import React, { useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import './MovieDetail.css';
+
+
 
 
 function MovieDetails() {
@@ -33,9 +36,10 @@ function MovieDetails() {
             </div>
          ))}
         </div>
-            <button data-testid="toList" onClick={handleClick}>Back</button>
+            <button data-testid="toList" className='backBtn' onClick={handleClick}>Back</button>
         </main>
     )
 }
 
 export default MovieDetails
+

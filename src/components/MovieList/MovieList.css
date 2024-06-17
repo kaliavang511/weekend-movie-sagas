@@ -1,4 +1,12 @@
 .movies {
     display : flex;
     flex-wrap: wrap;
+    padding: 50px;
+}
+
+.image{
+    padding: 20px;
+}
+.title{
+    padding: 30px;
 }
