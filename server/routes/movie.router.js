@@ -19,8 +19,6 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  console.log(req.body);
-  // RETURNING "id" will give us back the id of the created movie
   const insertMovieQuery = `
     INSERT INTO "movies" 
       ("title", "poster", "description")
@@ -33,14 +31,14 @@ router.post('/', (req, res) => {
     req.body.poster,
     req.body.description
   ]
-  // FIRST QUERY MAKES MOVIE
+ 
   pool.query(insertMovieQuery, insertMovieValues)
     .then(result => {
-      // ID IS HERE!
+   
       console.log('New Movie Id:', result.rows[0].id);
       const createdMovieId = result.rows[0].id
 
-      // Now handle the genre reference:
+      
       const insertMovieGenreQuery = `
         INSERT INTO "movies_genres" 
           ("movie_id", "genre_id")
@@ -51,17 +49,17 @@ router.post('/', (req, res) => {
         createdMovieId,
         req.body.genre_id
       ]
-      // SECOND QUERY ADDS GENRE FOR THAT NEW MOVIE
+    
       pool.query(insertMovieGenreQuery, insertMovieGenreValues)
         .then(result => {
-          //Now that both are done, send back success!
+      
           res.sendStatus(201);
         }).catch(err => {
-          // catch for second query
+      
           console.log(err);
           res.sendStatus(500)
       })
-    }).catch(err => { // 👈 Catch for first query
+    }).catch(err => { 
       console.log(err);
       res.sendStatus(500)
     })
